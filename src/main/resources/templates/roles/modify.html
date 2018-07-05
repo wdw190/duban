@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+
+<meta charset="utf-8"></meta>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<meta name="description" content=""></meta>
+<meta name="author" content=""></meta>
+<meta th:name="_csrf" th:content="${_csrf.token}" />
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}" />
+<title>督办系统</title>
+<link rel="shortcut icon" th:href="@{/icon/logo.ico}" />
+<!-- Bootstrap Core CSS -->
+<!-- Bootstrap Core CSS -->
+<link href="../home/vendor/bootstrap/css/bootstrap.min.css"
+	th:href="@{/home/vendor/bootstrap/css/bootstrap.min.css}"
+	rel="stylesheet"></link>
+
+</head>
+
+<body>
+
+	<div class="container">
+
+		<div sec:authorize="isAuthenticated()">
+
+			<form class="form-horizontal" id="modifyForm"
+				th:action="@{/role/modifyrole}" method="post">
+				<fieldset>
+					<legend>角色权限调整</legend>
+
+					<div class="form-group">
+						<label class="control-label col-xs-12  col-md-1 " for="roleId">角色编号</label>
+						<div class="col-xs-12 col-md-11 ">
+							<input type="text" class="form-control" id="roleId"
+								placeholder="请输入角色代码" name="roleId" disabled="disabled" th:value="${roleBO.roleId}"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12  col-md-1 " for="roleCode">角色代码</label>
+						<div class="col-xs-12 col-md-11 ">
+							<input type="text" class="form-control" id="roleCode"
+								placeholder="请输入角色代码" name="roleCode" disabled="disabled" th:value="${roleBO.role}"></input>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-xs-12  col-md-1 " for="roleDesc">角色描述</label>
+						<div class="col-xs-12 col-md-11 ">
+							<input type="text" class="form-control" id="roleDesc"
+								placeholder="请输入角色代码" name="roleDesc" disabled="disabled" th:value="${roleBO.roleDesc}"></input>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<div class="col-xs-12 col-md-12 ">
+
+							<div class="panel panel-info">
+								<div class="panel-heading">功能菜单</div>
+								<div class="panel-body">
+
+									<label class="checkbox-inline" th:each="menu,menuStat:${menuDOList}">
+										<input type="checkbox" th:attr='id=${menuStat.index }'
+										th:checked="${menu.haved}" th:value="${menu.menuId}" /><span
+										th:text="${menu.menuName}"></span>
+									</label>
+
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+
+					<div class="form-group">
+
+						<div class="col-xs-12 col-md-offset-3 col-md-9 ">
+							<button type="submit" class="btn btn-primary btn-lg btn-block">保存</button>
+							<a th:href="@{/accountmaintain/index}"
+								class="btn btn-info btn-lg btn-block">返回</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+
+
+		<!-- /.row -->
+		<!-- /.row -->
+		<div class="row">
+
+			<div class="modal fade" id="alertmodalsuccess">
+				<div class="modal-content">
+					<!-- <div class="modal-dialog"> -->
+					<div class="modal-header">
+						<a class="close" data-dismiss="modal">×</a>
+						<h3>提示信息-成功</h3>
+					</div>
+					<div class="modal-content">
+						<h4>【成功】</h4>
+						<p>成功创建新用户!!!</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-success" data-dismiss="modal">关闭</a>
+					</div>
+					<!-- </div>-->
+				</div>
+			</div>
+			<div class="modal fade" id="alertmodalexist">
+				<div class="modal-content">
+					<!-- <div class="modal-dialog"> -->
+					<div class="modal-header">
+						<a class="close" data-dismiss="modal">×</a>
+						<h3>提示信息-已存在</h3>
+					</div>
+					<div class="modal-content">
+						<h4>【存在】</h4>
+						<p>用户已存在，请修改用户名后重试！！！</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-success" data-dismiss="modal">关闭</a>
+					</div>
+					<!-- </div>-->
+				</div>
+			</div>
+
+			<div class="modal fade" id="alertmodalfailure">
+				<div class="modal-content">
+					<!-- <div class="modal-dialog"> -->
+					<div class="modal-header">
+						<a class="close" data-dismiss="modal">×</a>
+						<h3>提示信息-失败</h3>
+					</div>
+					<div class="modal-content">
+						<h4>【失败】</h4>
+						<p>新增用户失败，请重试!!!.</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-success" data-dismiss="modal">关闭</a>
+					</div>
+					<!-- </div>-->
+				</div>
+			</div>
+			<!-- /.row -->
+
+
+			<!-- /#page-wrapper -->
+
+		</div>
+		<!-- /.row -->
+		<!-- /.row -->
+
+		<!-- /#page-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+
+	<!-- logoutform -->
+	<div th:replace="fragments/header :: logoutform"></div>
+
+	<!-- jQuery -->
+	<script src="../home/vendor/jquery/jquery.min.js"
+		th:src="@{/home/vendor/jquery/jquery.min.js}"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="../home/vendor/bootstrap/js/bootstrap.min.js"
+		th:src="@{/home/vendor/bootstrap/js/bootstrap.min.js}"></script>
+
+	<!-- Metis Menu Plugin JavaScript -->
+	<script src="../home/vendor/metisMenu/metisMenu.min.js"
+		th:src="@{/home/vendor/metisMenu/metisMenu.min.js}"></script>
+
+	<!-- Morris Charts JavaScript -->
+	<script src="../home/vendor/raphael/raphael.min.js"
+		th:src="@{/home/vendor/raphael/raphael.min.js}"></script>
+	<script src="../home/vendor/morrisjs/morris.min.js"
+		th:src="@{/home/vendor/morrisjs/morris.min.js}"></script>
+	<script src="../home/data/morris-data.js"
+		th:src="@{/home/data/morris-data.js}"></script>
+
+	<!-- DataTables JavaScript -->
+	<script src="../home/vendor/datatables/js/jquery.dataTables.min.js"
+		th:src="@{/home/vendor/datatables/js/jquery.dataTables.min.js}"></script>
+	<script
+		src="../home/vendor/datatables-plugins/dataTables.bootstrap.min.js"
+		th:src="@{/home/vendor/datatables-plugins/dataTables.bootstrap.min.js}"></script>
+	<script
+		src="../home/vendor/datatables-responsive/dataTables.responsive.js"
+		th:src="@{/home/vendor/datatables-responsive/dataTables.responsive.js}"></script>
+
+
+	<!-- Custom Theme JavaScript -->
+	<script src="../home/dist/js/sb-admin-2.js"
+		th:src="@{/home/dist/js/sb-admin-2.js}"></script>
+	<script th:src="@{/twitter-bootstrap-v2/js/bootstrap-modal.js}"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$('#modifyForm').on('submit', function(event) {
+				var $form = $(this);
+
+				event.preventDefault();
+
+				//checkData();
+				modifyData();
+
+			});
+
+		});
+
+
+
+		function modifyData() {
+			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			var queryPojo = new Object();
+			queryPojo.roleId = $('#roleId').val();
+			queryPojo.roleCode = $('#roleCode').val();
+			queryPojo.roleDesc = $('#roleDesc').val();
+			
+			var menus = "";
+
+			$('input[type="checkbox"]:checked').each(function() {
+				menus = menus + $(this).val() + ",";
+
+			});
+
+			queryPojo.menus = menus;
+
+			var json = JSON.stringify(queryPojo);
+
+			//alert(json);
+
+			$.ajax({
+				type : $('#modifyForm').attr("method"),
+				contentType : 'application/json',
+				url : $('#modifyForm').attr("action"),
+				data : json,
+				beforeSend : function(xhr) {
+					
+					xhr.setRequestHeader(header, token);
+				}
+			}).then(function(data) {
+
+				if (data.flag == 'success') {
+
+					$('#alertmodalsuccess').modal('show');
+
+				} else {
+					$('#alertmodalfailure').modal('show');
+				}
+
+			});//then方法结束
+
+		}
+	</script>
+</body>
+
+</html>

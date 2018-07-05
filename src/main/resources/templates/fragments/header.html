@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar navbar-default navbar-static-top" role="navigation"
+		style="margin-bottom: 0;background-color: #ffffff;" th:fragment="header">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<!-- <a class="navbar-brand" href="#" style="color:#337ab7;">桑顿新能源督办管理系统</a> -->
+			<span class="navbar-brand loaderHeader"></span> <span
+				class="navbar-brand"
+				style='color: #3e9ff8; font-size: 30px;font-weight:bold; font-family:Microsoft YaHei'>桑顿新能源督办管理系统</span>
+		</div>
+		<!-- /.navbar-header -->
+
+		<ul class="nav navbar-top-links navbar-right">
+
+
+
+			<!-- /.dropdown -->
+			<li class="dropdown"><a class="dropdown-toggle"
+				data-toggle="dropdown" href="#"> <i class="fa fa-user fa-fw"></i>
+					<i class="fa fa-caret-down"></i>
+			</a>
+				<ul class="dropdown-menu dropdown-user">
+					<li><a href="#"><i class="fa fa-user fa-fw"></i> <span
+							sec:authorize="isAuthenticated()"> <span
+								sec:authentication="name"></span>
+						</span></a></li>
+
+					<li class="divider"></li>
+					<li sec:authorize="isAuthenticated()"><a href="#"
+						id="triggerformsubmitlogout"><i class="fa fa-sign-out fa-fw"></i>
+							退出</a></li>
+				</ul> <!-- /.dropdown-user --></li>
+			<!-- /.dropdown -->
+		</ul>
+		<!-- /.navbar-top-links -->
+
+		<div class="navbar-default sidebar" role="navigation" style="background-color: #ffffff;">
+			<div class="sidebar-nav navbar-collapse">
+				<ul class="nav" id="side-menu">
+					<!-- <li class="sidebar-search">
+						<div class="input-group custom-search-form">
+							<img alt="" class="center-block img-thumbnail"
+								th:src="@{/img/logo/logo.png}"></img>
+						</div> 
+					</li>-->
+
+					<li sec:authorize="hasRole('RECORDWORK')"><a
+						th:href="@{/workitem/index}" target="ifrm"><span
+							class="glyphicon glyphicon-edit"></span> 工作录入</a></li>
+					<li sec:authorize="hasRole('DEALTASK')"><a
+						th:href="@{/workitem/worklist}" target="ifrm"><span
+							class="glyphicon glyphicon-th-list"></span> 任务办理</a></li>
+					<li sec:authorize="hasRole('SUPERVISIONWORK')"><a href="#"><span
+							class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+							督办工作<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<li sec:authorize="hasRole('SUPERVISIONTASK')"><a
+								th:href="@{/workitem/supervisionlist}" target="ifrm">督办任务<span
+									class="glyphicon glyphicon-circle-arrow-right"
+									aria-hidden="true"></span></a></li>
+							<li sec:authorize="hasRole('UNDERTAKETASK')"><a href="#">承办任务<span
+									class="glyphicon glyphicon-circle-arrow-left"
+									aria-hidden="true"></span></a></li>
+						</ul> <!-- /.nav-second-level --></li>
+
+					<li sec:authorize="hasRole('USERMANAGEMENT')"><a
+						th:href="@{/accountmaintain/index}" target="ifrm"><span
+							class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+
+					<li sec:authorize="hasRole('ROLEMENUMANAGEMENT')"><a
+						th:href="@{/roles/index}" target="ifrm"><span
+							class="glyphicon glyphicon-user"></span> 角色/菜单管理</a></li>
+
+
+
+				</ul>
+			</div>
+			<!-- /.sidebar-collapse -->
+		</div>
+		<!-- /.navbar-static-side -->
+	</nav>
+
+	<div th:fragment="logoutform" style="display: none;">
+		<form action="#" th:action="@{/logout}" method="post">
+			<input type="submit" value="Logout" id="submitlogout" />
+		</form>
+	</div>
+</body>
+</html>

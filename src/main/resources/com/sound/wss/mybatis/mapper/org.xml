@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2015-2016 the original author or authors. Licensed under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sound.wss.mybatis.mapper.OrgMapper">
+
+	<resultMap type="com.sound.wss.po.OrgUserDO" id="SingleOrgUserDOMap">
+		<result property="ID" column="ID" />
+		<result property="workerId" column="WORKER_ID" />
+		<result property="name" column="NAME" />
+		<result property="sex" column="SEX" />
+		<result property="telephone" column="TELEPHONE" />
+		<result property="mobile" column="MOBILE" />
+		<result property="jobTitle" column="JOB_TITLE" />
+		<result property="deptId" column="DEPT_ID" />
+
+
+	</resultMap>
+
+
+
+	<!-- 组织架构 -->
+	<resultMap type="com.sound.wss.bo.OrgBO" id="SingleOrgBOMap">
+		<result property="deptId" column="DEPT_ID" />
+		<result property="deptName" column="DEPT_NAME" />
+		<result property="supDepid" column="SUP_DEPID" />
+
+
+		<!-- 使用 嵌套 查询实现一对多关系映射 子部门 -->
+		<collection property="orgDeptDOList" column="DEPT_ID"
+			select="listAllSubOrgs" />
+		<collection property="orgUserDOList" column="DEPT_ID"
+			select="listAllUsers" />
+
+	</resultMap>
+
+	<!-- 构建前台展示的数据 开始 -->
+
+	<resultMap type="com.sound.wss.bo.TreeNodeBO" id="SingleTreeNodeBOMap">
+		<result property="text" column="DEPT_NAME" />
+		<result property="href" column="DEPT_ID" />
+		<result property="icon" column="ICON" />
+		
+		<!-- 使用 嵌套 查询实现一对多关系映射 子部门 -->
+		<collection property="nodes" column="DEPT_ID" select="listAllSubNodes" />
+
+
+	</resultMap>
+
+
+	<select id="listAllNodes" parameterType="Integer" resultMap="SingleTreeNodeBOMap">
+
+		SELECT DEPT_ID, DEPT_NAME,'glyphicon glyphicon-sd-video' AS ICON
+		FROM tb_dept where DEPT_ID =
+		#{deptId}
+		
+
+	</select>
+
+	<select id="listAllSubNodes" parameterType="Integer" resultMap="SingleTreeNodeBOMap">
+
+		SELECT DEPT_ID, DEPT_NAME,'glyphicon glyphicon-sd-video' AS ICON
+		FROM tb_dept where SUP_DEPID =
+		#{supDepid}
+		
+		UNION
+		 
+		SELECT 
+		WORKER_ID AS DEPT_ID,
+		NAME AS DEPT_NAME,'glyphicon glyphicon-user' AS ICON
+		
+		FROM tb_user
+		WHERE DEPT_ID = #{supDepid}
+
+	</select>
+
+	<!-- 构建前台展示的数据 结束 -->
+
+
+	<select id="listAllOrgs" parameterType="Integer" resultMap="SingleOrgBOMap">
+
+		SELECT DEPT_ID, DEPT_NAME, SUP_DEPID
+		FROM tb_dept where DEPT_ID =
+		#{deptId}
+
+	</select>
+
+	<select id="listAllSubOrgs" parameterType="Integer" resultMap="SingleOrgBOMap">
+
+		SELECT DEPT_ID, DEPT_NAME, SUP_DEPID
+		FROM tb_dept where SUP_DEPID =
+		#{supDepid}
+
+	</select>
+
+
+	<select id="listAllUsers" parameterType="Integer" resultMap="SingleOrgUserDOMap">
+
+		SELECT ID,
+		WORKER_ID,
+		NAME,
+		SEX,
+		TELEPHONE,
+		MOBILE,
+		JOB_TITLE,
+		DEPT_ID
+		FROM
+		tb_user
+		WHERE DEPT_ID = #{deptId}
+
+	</select>
+
+
+	<!-- 组织架构 -->
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2015-2016 the original author or authors. Licensed under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sound.roles.mybatis.mapper.RoleMapper">
+
+	<resultMap id="singleSimpleRoleBOMap" type="com.sound.roles.bo.SimpleRoleBO">
+		<result property="roleId" column="roleid" />
+		<result property="role" column="role" />
+		<result property="roleDesc" column="roledesc" />
+		<result property="menuCode" column="menu_code" />
+		<result property="menuName" column="menu_name" />
+
+
+	</resultMap>
+
+
+	<resultMap id="singleMenuDOMap" type="com.sound.roles.po.MenuDO">
+		<result property="menuId" column="menu_id" />
+		<result property="menuName" column="menu_name" />
+		<result property="menuCode" column="menu_code" />
+		<result property="menuCreated" column="menu_created" />
+		<result property="menuUpdated" column="menu_updated" />
+
+
+	</resultMap>
+	
+	<!-- 角色 -->
+   <resultMap type="com.sound.roles.bo.RoleBO" id="SingleRoleBOMap">
+	<result property="roleId" column="roleid" />
+	<result property="role" column="role" />
+	<result property="roleDesc" column="roledesc" />
+	
+	
+	<!-- 一对多关系映射  -->
+		<collection property="roleMenuDOList" column="roleId"
+	select="listMenusInfo" />
+	
+	
+   </resultMap>
+   
+   <resultMap id="singleRoleMenuDOMap" type="com.sound.roles.po.RoleMenuDO">
+		<result property="id" column="id" />
+		<result property="roleId" column="role_id" />
+		<result property="menuId" column="menu_id" />
+		
+	</resultMap>
+
+
+
+	<select id="listAllRoles" parameterType="com.sound.roles.dto.RoleCriticalDTO"
+		resultMap="singleSimpleRoleBOMap">
+
+		<bind name="newRoleCode" value="'%' + _parameter.getRoleCode + '%'" />
+		<bind name="newRoleDesc" value="'%' + _parameter.getRoleDesc + '%'" />
+
+		SELECT tba.roleid,
+		tba.role,
+		tba.roledesc,
+       <![CDATA[ group_concat(tbc.menu_code  SEPARATOR '<br/>') AS menu_code, ]]>
+       <![CDATA[ group_concat(tbc.menu_name  SEPARATOR '<br/>') AS menu_name ]]>
+		FROM roles AS tba
+		LEFT JOIN role_menu AS tbb ON tba.roleid =
+		tbb.role_id
+		LEFT JOIN menus AS tbc ON tbb.menu_id = tbc.menu_id
+
+		<where>
+			<if
+				test=" newRoleCode != null and newRoleCode != '' and newRoleCode != '%%'"> <![CDATA[ tba.role like #{newRoleCode} ]]>
+			</if>
+
+			<if
+				test=" newRoleDesc != null and newRoleDesc != '' and newRoleDesc != '%%'"> <![CDATA[ and tba.roledesc like #{newRoleDesc}  ]]>
+			</if>
+
+		</where>
+
+		GROUP BY tba.roleid, tba.role, tba.roledesc
+
+	</select>
+
+
+	<select id="listAllMenus" resultMap="singleMenuDOMap">
+
+		SELECT menu_id, menu_name,
+		menu_code, menu_created, menu_updated
+		FROM menus;
+
+	</select>
+	
+	<select id="singleRoleInfo" parameterType="Integer" resultMap="SingleRoleBOMap">
+	
+	SELECT roleid, role, roledesc 
+    FROM roles
+    WHERE roleid = #{roleId}
+	
+	</select>
+	
+	<select id="listMenusInfo" parameterType="String" resultMap="singleRoleMenuDOMap">
+	SELECT id, role_id, menu_id 
+    FROM role_menu
+    WHERE role_id = #{roleId}
+	
+	</select>
+
+
+
+	<insert id="insertRole" parameterType="com.sound.roles.po.RoleDO"
+		useGeneratedKeys="true" keyProperty="roleId">
+
+		INSERT INTO roles
+		(role,
+		roledesc)
+		VALUES (#{role}, #{roleDesc});
+
+	</insert>
+
+
+	<insert id="insertRoleMenus" parameterType="java.util.List">
+		INSERT INTO role_menu
+         (role_id, menu_id) 
+        VALUES 
+		<foreach collection="list" item="item" index="index"
+			separator=" , ">
+			(#{item.roleId},#{item.menuId})
+		</foreach>
+
+	</insert>
+	
+	
+	<delete id="deleteRoleMenuByRoleId" parameterType="String">
+	
+	delete from role_menu where role_id = #{roleId}
+	
+	</delete>
+	
+
+
+
+
+
+
+</mapper>
