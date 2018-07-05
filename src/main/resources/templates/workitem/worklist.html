@@ -293,12 +293,12 @@
 									</thead>
 									<tbody>
 
-										<tr>
-											<th th:text="${workViewDO.all}"></th>
-											<th th:text="${workViewDO.open}"></th>
-											<th th:text="${workViewDO.done}"></th>
-											<th th:text="${workViewDO.delay}"></th>
-											<th th:text="${workViewDO.cancel}"></th>
+										<tr th:if="${workViewDO != null }">
+											<th th:text="${workViewDO.all}">0</th>
+											<th th:text="${workViewDO.open}">0</th>
+											<th th:text="${workViewDO.done}">0</th>
+											<th th:text="${workViewDO.delay}">0</th>
+											<th th:text="${workViewDO.cancel}">0</th>
 
 										</tr>
 
@@ -323,7 +323,7 @@
 
 							</div>
 
-							<div class="panel-body">
+							<div class="panel-body" th:if="${dueTaskDO != null }">
 								<div class="list-group">
 									<a href="#" class="list-group-item"> <i
 										class="fa fa-comment fa-fw"></i> 1、即将到期的工作 <span
@@ -350,7 +350,7 @@
 
 							</div>
 
-							<div class="panel-body">
+							<div class="panel-body" th:unless="${#lists.isEmpty(supervisionInfoDOList)}">
 								<div class="list-group">
 									<a href="#" class="list-group-item"
 										th:each="supervisionInfoDO,supervisionInfoDOStat : ${supervisionInfoDOList}">
