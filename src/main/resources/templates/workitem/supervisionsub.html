@@ -35,7 +35,8 @@
 
 							<div class="col-sm-6">
 								<h4 class="modal-title" id="exampleModalLongTitle">
-									<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> 督办处理
+									<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+									督办处理
 								</h4>
 							</div>
 							<div class="col-sm-6">
@@ -50,7 +51,7 @@
 					</div>
 					<div class="modal-body">
 
-						<div class="row" style="height: 38vh;">
+						<div class="row" style="height: 40vh;">
 							<div class="col-sm-2">
 								<!-- required for floating -->
 								<!-- Nav tabs -->
@@ -76,7 +77,7 @@
 													class="col-sm-2 col-lg-2 control-label">工作项类型</label>
 												<div class="col-sm-10 col-lg-10">
 													<select class="form-control" id="workType" name="workType"
-														disabled="disabled">
+														readonly="readonly">
 
 														<option value="GROUPWORK">集团工作督办</option>
 														<option value="CHAIRMAN">董事长督办</option>
@@ -98,7 +99,7 @@
 													class="col-sm-2 col-lg-2 control-label">工作项描述</label>
 												<div class="col-sm-10 col-lg-10">
 													<input type="text" class="form-control" id="workSummary"
-														name="workSummary" disabled="disabled"></input>
+														name="workSummary" readonly="readonly"></input>
 												</div>
 
 
@@ -109,7 +110,7 @@
 													class="col-sm-2 col-lg-2 control-label">详细说明</label>
 												<div class="col-sm-10 col-lg-10">
 													<textarea class="form-control" id="workDescription"
-														rows="3" name="workDescription" disabled="disabled"></textarea>
+														rows="3" name="workDescription" readonly="readonly"></textarea>
 												</div>
 
 
@@ -162,7 +163,7 @@
 													class="col-sm-2 col-lg-2 control-label">任务项描述</label>
 												<div class="col-sm-10 col-lg-10">
 													<input type="text" class="form-control " id="taskSummary"
-														name="taskSummary" disabled="disabled"></input>
+														name="taskSummary" readonly="readonly"></input>
 												</div>
 
 
@@ -173,7 +174,7 @@
 													class="col-sm-2 col-lg-2 control-label">详细说明</label>
 												<div class="col-sm-10 col-lg-10">
 													<textarea class="form-control" id="taskDescription"
-														rows="3" name="taskDescription" disabled="disabled"></textarea>
+														rows="3" name="taskDescription" readonly="readonly"></textarea>
 												</div>
 
 
@@ -186,13 +187,22 @@
 												<div class="col-sm-2 col-lg-2">
 													<input type="text" class="form-control"
 														id="reporterTaskItem" name="reporterTaskItem"
-														disabled="disabled"></input>
+														readonly="readonly"></input>
 												</div>
 												<label for="supervisor"
 													class="col-sm-1 col-lg-1 control-label">督办人</label>
 												<div class="col-sm-2 col-lg-2">
-													<input type="text" class="form-control" id="supervisor"
-														name="supervisor" disabled="disabled"></input>
+													<div class="input-group">
+														<input type="text" class="form-control" id="supervisor"
+															name="supervisor" readonly="readonly"></input> <span
+															class="input-group-btn">
+															<button class="btn btn-info" type="button"
+																id="supervisionbtn"
+																onclick="openOrgDialog('supervision')">
+																<span class="glyphicon glyphicon-zoom-in"></span>
+															</button>
+														</span>
+													</div>
 												</div>
 												<label for="taskCreated"
 													class="col-sm-2 col-lg-2 control-label">督办开始/创建时间</label>
@@ -201,7 +211,7 @@
 														id="taskCreatedField" data-date=""
 														data-date-format="yyyy-mm-dd">
 														<input type="text" class="form-control " id="taskCreated"
-															name="taskCreated" disabled="disabled" /> <span
+															name="taskCreated" readonly="readonly" /> <span
 															class="input-group-addon"><span
 															class="glyphicon glyphicon-remove"></span></span> <span
 															class="input-group-addon"><span
@@ -216,14 +226,31 @@
 												<label for="assignee"
 													class="col-sm-2 col-lg-2 control-label">负责人/承办人</label>
 												<div class="col-sm-4 col-lg-4">
-													<input type="text" class="form-control " id="assignee"
-														name="assignee" disabled="disabled"></input>
+													<div class="input-group">
+														<input type="text" class="form-control " id="assignee"
+															name="assignee" readonly="readonly"></input> <span
+															class="input-group-btn">
+															<button class="btn btn-info" type="button"
+																id="undertakerbtn" onclick="openOrgDialog('undertaker')">
+																<span class="glyphicon glyphicon-zoom-in"></span>
+															</button>
+														</span>
+													</div>
 												</div>
 												<label for="assigneeDept"
 													class="col-sm-2 col-lg-2 control-label">负责/承办部门</label>
 												<div class="col-sm-4 col-lg-4">
-													<input type="text" class="form-control " id="assigneeDept"
-														name="assigneeDept" disabled="disabled"></input>
+													<div class="input-group">
+														<input type="text" class="form-control " id="assigneeDept"
+															name="assigneeDept" readonly="readonly"></input> <span
+															class="input-group-btn">
+															<button class="btn btn-info" type="button"
+																id="undertakerdeptbtn"
+																onclick="openOrgDialog('undertakerdept')">
+																<span class="glyphicon glyphicon-zoom-in"></span>
+															</button>
+														</span>
+													</div>
 												</div>
 
 
@@ -233,8 +260,17 @@
 
 												<label for="assist" class="col-sm-2 col-lg-2 control-label">协助部门/人</label>
 												<div class="col-sm-4 col-lg-4">
-													<input type="text" class="form-control" id="assist"
-														name="assist" disabled="disabled"></input>
+													<div class="input-group">
+														<input type="text" class="form-control" id="assist"
+															name="assist" readonly="readonly"></input><span
+															class="input-group-btn">
+															<button class="btn btn-info" type="button"
+																id="assistdeptpbtn"
+																onclick="openOrgDialog('assistdeptp')">
+																<span class="glyphicon glyphicon-zoom-in"></span>
+															</button>
+														</span>
+													</div>
 												</div>
 												<label for="taskDuedate"
 													class="col-sm-2 col-lg-2 control-label">完成时间/到期日</label>
@@ -244,10 +280,10 @@
 														id="taskDuedateField" data-date=""
 														data-date-format="yyyy-mm-dd">
 														<input type="text" class="form-control " id="taskDuedate"
-															name="taskDuedate" disabled="disabled" /> <span
-															class="input-group-addon"><span
+															name="taskDuedate" readonly="readonly" /> <span
+															id="taskDuedateRemove" class="input-group-addon"><span
 															class="glyphicon glyphicon-remove"></span></span> <span
-															class="input-group-addon"><span
+															id="taskDuedateAdd" class="input-group-addon"><span
 															class="glyphicon glyphicon-calendar"></span></span>
 													</div>
 												</div>
@@ -339,9 +375,13 @@
 													<input class="form-control" name="actionType" type="radio"
 														id="commType02" value="urging" />催办
 												</div>
-												<div class="col-sm-3 col-lg-3 " id="radioapproval">
+												<div class="col-sm-3 col-lg-3 " id="radioapprovaladjustment">
 													<input class="form-control" name="actionType" type="radio"
-														 value="approval" />审批
+														value="applyforadjustment_approval" />变更(调整)/审批
+												</div>
+												<div class="col-sm-3 col-lg-3 " id="radioapprovalcomplete">
+													<input class="form-control" name="actionType" type="radio"
+														value="applyforcompleted_approval" />完成审批
 												</div>
 
 
@@ -431,7 +471,8 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-sm-12 col-lg-12" id="infoModalDealTaskItemModalBody"></div>
+							<div class="col-sm-12 col-lg-12"
+								id="infoModalDealTaskItemModalBody"></div>
 						</div>
 
 					</div>
@@ -441,7 +482,7 @@
 							id="closeDealTaskItemModal" name="closeDealTaskItemModal">
 							<span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>关闭/确认
 						</button>
-						
+
 					</div>
 				</div>
 				<!-- /.modal-content -->

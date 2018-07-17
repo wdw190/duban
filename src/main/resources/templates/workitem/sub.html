@@ -167,7 +167,7 @@
 					<div class="modal-body">
 
 						<iframe
-							style="top: 0; bottom: 0; left: 0; width: 100%; height: 78vh; border: 1px solid #3e9ff8;"
+							style="top: 0; bottom: 0; left: 0; width: 100%; height: 88vh; border: 1px solid #3e9ff8;"
 							id="workifrm" name="workifrm" src=""></iframe>
 
 					</div>
@@ -307,8 +307,16 @@
 								<label for="assigneeDept"
 									class="col-sm-2 col-lg-2 control-label">负责/承办部门</label>
 								<div class="col-sm-4 col-lg-4">
-									<input type="text" class="form-control requiredBorder"
-										id="assigneeDept" name="assigneeDept" placeholder="承办部门--必填"></input>
+									<div class="input-group">
+										<input type="text" class="form-control requiredBorder"
+											id="assigneeDept" name="assigneeDept" placeholder="承办部门--必填"></input>
+										<span class="input-group-btn">
+											<button class="btn btn-info" type="button"
+												onclick="openOrgDialog('undertakerdept')">
+												<span class="glyphicon glyphicon-zoom-in"></span>
+											</button>
+										</span>
+									</div>
 								</div>
 
 
@@ -318,8 +326,15 @@
 
 								<label for="assist" class="col-sm-2 col-lg-2 control-label">协助部门/人</label>
 								<div class="col-sm-4 col-lg-4">
-									<input type="text" class="form-control" id="assist"
-										name="assist"></input>
+									<div class="input-group">
+										<input type="text" class="form-control" id="assist"
+											name="assist"></input> <span class="input-group-btn">
+											<button class="btn btn-info" type="button"
+												onclick="openOrgDialog('assistdeptp')">
+												<span class="glyphicon glyphicon-zoom-in"></span>
+											</button>
+										</span>
+									</div>
 								</div>
 								<label for="taskDuedate" class="col-sm-2 col-lg-2 control-label">完成时间/到期日</label>
 								<div class="col-sm-4 col-lg-4">

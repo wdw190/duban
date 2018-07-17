@@ -12,7 +12,7 @@
 <mapper namespace="com.sound.wss.mybatis.mapper.OrgMapper">
 
 	<resultMap type="com.sound.wss.po.OrgUserDO" id="SingleOrgUserDOMap">
-		<result property="ID" column="ID" />
+		<result property="id" column="ID" />
 		<result property="workerId" column="WORKER_ID" />
 		<result property="name" column="NAME" />
 		<result property="sex" column="SEX" />
@@ -64,7 +64,7 @@
 
 	</select>
 
-	<select id="listAllSubNodes" parameterType="Integer" resultMap="SingleTreeNodeBOMap">
+	<select id="listAllSubNodes" parameterType="Long" resultMap="SingleTreeNodeBOMap">
 
 		SELECT DEPT_ID, DEPT_NAME,'glyphicon glyphicon-sd-video' AS ICON
 		FROM tb_dept where SUP_DEPID =
@@ -119,6 +119,30 @@
 
 
 	<!-- 组织架构 -->
+
+	<!-- 批量插入部门 -->
+	<insert id="insertOrgDeptDO" parameterType="java.util.List">
+		INSERT INTO tb_dept
+		(DEPT_ID, DEPT_NAME, SUP_DEPID)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=" , ">
+			(#{item.deptId}, #{item.deptName}, #{item.supDepid})
+		</foreach>
+
+	</insert>
+
+	<!-- 批量插入人员 -->
+	<insert id="insertOrgUserDO" parameterType="java.util.List">
+		INSERT INTO tb_user
+		(ID,WORKER_ID, NAME, TELEPHONE, MOBILE, JOB_TITLE, DEPT_ID) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=" , ">
+			(#{item.id},#{item.workerId}, #{item.name}, #{item.telephone},
+			#{item.mobile}, #{item.jobTitle}, #{item.deptId})
+		</foreach>
+
+	</insert>
 
 
 

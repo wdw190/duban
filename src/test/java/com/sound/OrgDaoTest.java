@@ -19,7 +19,7 @@ public class OrgDaoTest {
 	@Test
 	public void m1(){
 		System.out.println("--------------------------------------------------------------");
-		this.orgDao.listAllOrgs(0).stream().forEach((temp)->System.out.println(temp.toString()));
+		this.orgDao.listAllOrgs(350).stream().forEach((temp)->System.out.println(temp.toString()));
 		System.out.println("--------------------------------------------------------------");
 	}
 

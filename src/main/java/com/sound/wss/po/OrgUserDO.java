@@ -9,19 +9,19 @@ public class OrgUserDO implements Serializable {
 	 */
 	private static final long serialVersionUID = -4215160019400650045L;
 
-	private Integer ID;
+	private Integer id;
 	private String workerId;
 	private String name;
 	private String sex;
 	private String telephone;
 	private String mobile;
-	private Integer jobTitle;
+	private String jobTitle;
 	private Integer deptId;
-	public Integer getID() {
-		return ID;
+	public Integer getId() {
+		return id;
 	}
-	public void setID(Integer iD) {
-		ID = iD;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public String getWorkerId() {
 		return workerId;
@@ -53,10 +53,10 @@ public class OrgUserDO implements Serializable {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public Integer getJobTitle() {
+	public String getJobTitle() {
 		return jobTitle;
 	}
-	public void setJobTitle(Integer jobTitle) {
+	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
 	public Integer getDeptId() {
@@ -67,9 +67,13 @@ public class OrgUserDO implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "OrgUserDO [ID=" + ID + ", workerId=" + workerId + ", name=" + name + ", sex=" + sex + ", telephone="
+		return "OrgUserDO [id=" + id + ", workerId=" + workerId + ", name=" + name + ", sex=" + sex + ", telephone="
 				+ telephone + ", mobile=" + mobile + ", jobTitle=" + jobTitle + ", deptId=" + deptId + "]";
 	}
+	
+	
+	
+	
 
 	
 

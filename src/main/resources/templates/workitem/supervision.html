@@ -127,11 +127,13 @@
 	th:src="@{/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
 <!-- iCheck -->
 <script type="text/javascript" th:src="@{/icheck-1.x/icheck.js}"></script>
+<!-- treeVIew -->
+<script type="text/javascript" th:src="@{/bootstraptreeview/js/bootstrap-treeview.js}"></script>
 <!-- Custom JS -->
 <script type="text/javascript" th:src="@{/wss/js/commonutils.js}"></script>
 <script type="text/javascript" th:src="@{/wss/js/supervision.js}"></script>
 
-
+<script type="text/javascript" th:src="@{/wss/js/org.js}"></script>
 </head>
 
 <body>
@@ -349,6 +351,14 @@
 		<div th:replace="workitem/supervisionsub :: dealTaskItemModalCenter"></div>
 		<!-- 信息提示框 -->
 		<div th:replace="workitem/supervisionsub :: infoModalDealTaskItem"></div>
+				<!-- 提示信息 -->
+		<div th:replace="workitem/sub :: infoModal"></div>
+		<div th:replace="workitem/sub :: infoModalTaskItem"></div>
+		<!-- 加载提示信息 -->
+
+		<div th:replace="workitem/commonsub :: loadingInfoModal"></div>
+		<!-- 组织架构 -->
+		<div th:replace="workitem/commonsub :: OrgModal"></div>
 
 
 

@@ -73,6 +73,7 @@ public class DefaultTaskItemService implements TaskItemService {
 			this.workTaskActionDao.insertWorkTaskAction(workTaskActionDO);
 
 			actionResultDTO.setFlag("success");
+			actionResultDTO.setMsg(taskItemDO.getTaskId());
 		} catch (Exception e) {
 			actionResultDTO.setFlag("failed");
 			actionResultDTO.setMsg(e.getMessage());

@@ -1,6 +1,6 @@
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-//初始化单选按钮样式
+// 初始化单选按钮样式
 function initRadioButtonTaskItem(){
 	
 	$(':radio').iCheck({
@@ -65,6 +65,15 @@ function initSupervisionDateSelector() {
 		autoclose : 1,
 		pickerPosition : 'bottom-left'
 	});
+	
+	$('#taskDuedateField').datetimepicker({
+		minView : "month", // 选择日期后，不会再跳转去选择时分秒
+		language : 'zh-CN',
+		format : 'yyyy-mm-dd',
+		todayBtn : 1,
+		autoclose : 1,
+		pickerPosition : 'bottom-left'
+	});
 
 }
 
@@ -90,15 +99,16 @@ function initRecordDate() {
 
 	// 打印日期
 	$('#createdStart').val(thisDateStart);
-	$('#taskDuedateStart').val(thisDateStart);
+	// $('#taskDuedateStart').val(thisDateStart);
 	
 	$('#createdEnd').val(thisDateEnd);
-	$('#taskDuedateEnd').val(thisDateEnd);
+	// $('#taskDuedateEnd').val(thisDateEnd);
 	
 
 }
 /**
  * 督办任务
+ * 
  * @param taskId
  * @returns
  */
@@ -202,14 +212,38 @@ function SupervisionTaskItem(taskItemId){
 				initRadioButtonTaskItem();
 				$('#loadingInfoModal').modal("hide");
 				
+				// 申请调整才可以修改
+				if(data.taskStatus == 'applyforadjustment'){
+					$('#supervisionbtn').show();
+					$('#undertakerbtn').show();
+					$('#undertakerdeptbtn').show();
+					$('#assistdeptpbtn').show();
+					$('#taskDuedateRemove').show();
+					$('#taskDuedateAdd').show();
+				}else{
+					$('#supervisionbtn').hide();
+					$('#undertakerbtn').hide();
+					$('#undertakerdeptbtn').hide();
+					$('#assistdeptpbtn').hide();
+					$('#taskDuedateRemove').hide();
+					$('#taskDuedateAdd').hide();
+				}
+				// 基于状态显示督办内容
 				 if(data.taskStatus == 'approval' || data.taskStatus == 'cancel'){
 					$('#communicationRow').hide();
-				}else if(data.taskStatus == 'applyforadjustment' || data.taskStatus == 'applyforcompleted'){
-					$('#radioapproval').show();
+				}else if(data.taskStatus == 'applyforadjustment'){
+					$('#radioapprovaladjustment').show();
+					$('#radioapprovalcomplete').hide();
+					$('#radiourging').hide();
+					$('#communicationRow').show();
+				}else if(data.taskStatus == 'applyforcompleted'){
+					$('#radioapprovaladjustment').hide();
+					$('#radioapprovalcomplete').show();
 					$('#radiourging').hide();
 					$('#communicationRow').show();
 				}else{
-					$('#radioapproval').hide();
+					$('#radioapprovaladjustment').hide();
+					$('#radioapprovalcomplete').hide();
 					$('#radiourging').show();
 					$('#communicationRow').show();
 				}
@@ -225,6 +259,7 @@ function SupervisionTaskItem(taskItemId){
 }
 /**
  * 初始化督办任务列表
+ * 
  * @returns
  */
 function initDataTable_MySupervisionTaskListTable() {
@@ -250,6 +285,7 @@ function initDataTable_MySupervisionTaskListTable() {
 }
 /**
  * 查询督办任务
+ * 
  * @returns
  */
 function querySupervisionTaskItem() {
@@ -266,7 +302,7 @@ function querySupervisionTaskItem() {
 
 	var json = JSON.stringify(initPojo);
 	
-	//alert('json='+json);
+	// alert('json='+json);
 
 	$.ajax({
 				type : 'POST',
@@ -275,7 +311,7 @@ function querySupervisionTaskItem() {
 				data:json,
 				beforeSend : function(xhr) {
 					xhr.setRequestHeader(header, token);
-					//$('#queryingInfoModal').modal('show');
+					// $('#queryingInfoModal').modal('show');
 				}
 			})
 			.then(
@@ -449,7 +485,7 @@ function querySupervisionTaskItem() {
 							initDataTable_MySupervisionTaskListTable();
 						}
 
-						//$('#queryingInfoModal').modal('hide');
+						// $('#queryingInfoModal').modal('hide');
 					});// then方法结束
 
 }
@@ -460,11 +496,29 @@ function querySupervisionTaskItem() {
  * @returns
  */
 function addCommContent() {	
+	
+	var fd = new FormData($("#add-commcontent-form")[0]);
+	// 调整审批时候要修改任务项的信息
+	if($('input:radio:checked').val() == 'applyforadjustment_approval'){
+		
+		fd.append("taskId", $('#workOrTaskId').val());
+		fd.append("taskSummary", $('#taskSummary').val());
+		fd.append("taskDescription", $('#taskDescription').val());
+		fd.append("reporter", $('#reporterTaskItem').val());
+		fd.append("supervisor", $('#supervisor').val());
+		fd.append("assignee", $('#assignee').val());
+		fd.append("assigneeDept", $('#assigneeDept').val());
+		fd.append("assist", $('#assist').val());
+		fd.append("taskDuedate", $('#taskDuedate').val());
+		
+		
+	}
 
 	$.ajax({
 		url : $('#add-commcontent-form').attr("action"),
 		type : $('#add-commcontent-form').attr("method"),
-		data : new FormData($("#add-commcontent-form")[0]),
+		// data : new FormData($("#add-commcontent-form")[0]),
+		data:fd,
 		enctype : 'multipart/form-data',
 		processData : false,
 		contentType : false,

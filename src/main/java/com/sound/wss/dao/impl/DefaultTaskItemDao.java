@@ -15,6 +15,7 @@ import com.sound.wss.mybatis.mapper.TaskItemMapper;
 import com.sound.wss.po.DueTaskDO;
 import com.sound.wss.po.SupervisionInfoDO;
 import com.sound.wss.po.TaskItemDO;
+import com.sound.wss.po.WeChatPersonInfoDO;
 import com.sound.wss.po.WorkViewDO;
 
 @Repository("defaultTaskItemDao")
@@ -77,8 +78,6 @@ public class DefaultTaskItemDao implements TaskItemDao {
 		TaskItemMapper mapper = this.sqlSession.getMapper(TaskItemMapper.class);
 		return mapper.updateTaskItemDoByTaskID(taskItemDO);
 	}
-	
-	
 
 	@Override
 	public int cancelTaskItemStatusByTaskID(TaskItemDO taskItemDO) {
@@ -86,31 +85,28 @@ public class DefaultTaskItemDao implements TaskItemDao {
 		return mapper.cancelTaskItemStatusByTaskID(taskItemDO);
 	}
 
-	
-	
-	
 	@Override
 	public List<SupervisionInfoDO> listAllSupervisionInfos(String assignee) {
 		TaskItemMapper mapper = this.sqlSession.getMapper(TaskItemMapper.class);
 		return mapper.listAllSupervisionInfos(assignee);
 	}
-	
-	
-	
 
 	@Override
 	public DueTaskDO listDueTaskInfos(String assignee) {
 		TaskItemMapper mapper = this.sqlSession.getMapper(TaskItemMapper.class);
 		return mapper.listDueTaskInfos(assignee);
 	}
-	
-	
-	
 
 	@Override
 	public WorkViewDO listAllWorkViewInfos(String assignee) {
 		TaskItemMapper mapper = this.sqlSession.getMapper(TaskItemMapper.class);
 		return mapper.listAllWorkViewInfos(assignee);
+	}
+
+	@Override
+	public WeChatPersonInfoDO viewWeChatPersonInfo(String taskId) {
+		TaskItemMapper mapper = this.sqlSession.getMapper(TaskItemMapper.class);
+		return mapper.viewWeChatPersonInfo(taskId);
 	}
 
 	public SqlSession getSqlSession() {

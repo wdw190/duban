@@ -213,6 +213,14 @@ function dealTaskItem(taskItemId){
 				// 初始化按钮样式
 				initRadioButtonTaskItem();
 				$('#loadingInfoModal').modal("hide");
+				//状态判断
+				if(data.taskStatus == 'approval' || data.taskStatus == 'applyforadjustment' || data.taskStatus == 'applyforcompleted'){
+					$('#communicationDealDiv').hide();					
+				}else{
+					$('#communicationDealDiv').show();					
+				}
+				
+				
 				$('#dealTaskItemModalCenter').modal('show');
 				
 			});

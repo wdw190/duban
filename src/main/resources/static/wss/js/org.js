@@ -9,6 +9,7 @@ function openOrgDialog(selectType) {
 
 		beforeSend : function(xhr) {
 			xhr.setRequestHeader(header, token);
+			$('#loadingInfoModal').modal('show');
 		}
 	}).then(function(data) {
 
@@ -24,11 +25,26 @@ function openOrgDialog(selectType) {
 		if (selectType == 'supervision') {
 			$('#addSupervisionBtn').show();
 			$('#addUndertakerBtn').hide();
+			$('#addUndertakerdeptBtn').hide();
+			$('#addAssistdeptpBtn').hide();
 		} else if (selectType == 'undertaker') {
 			$('#addUndertakerBtn').show();
 			$('#addSupervisionBtn').hide();
+			$('#addUndertakerdeptBtn').hide();
+			$('#addAssistdeptpBtn').hide();
+		}else if (selectType == 'undertakerdept') {
+			$('#addUndertakerBtn').hide();
+			$('#addSupervisionBtn').hide();
+			$('#addUndertakerdeptBtn').show();
+			$('#addAssistdeptpBtn').hide();
+		}else if (selectType == 'assistdeptp') {
+			$('#addUndertakerBtn').hide();
+			$('#addSupervisionBtn').hide();
+			$('#addUndertakerdeptBtn').hide();
+			$('#addAssistdeptpBtn').show();
 		}
 
+		$('#loadingInfoModal').modal('hide');
 		$('#OrgModal').modal('show');
 
 	});
@@ -45,6 +61,10 @@ function addSupervisor(valueType) {
 		$('#supervisor').val($('#SupervisorId').val());
 	} else if (valueType == 'undertaker') {
 		$('#assignee').val($('#SupervisorId').val());
+	}else if (valueType == 'undertakerdept') {
+		$('#assigneeDept').val($('#SupervisorName').val());
+	}else if (valueType == 'assistdeptp') {
+		$('#assist').val($('#SupervisorName').val());
 	}
 
 	$('#OrgModal').modal('hide');

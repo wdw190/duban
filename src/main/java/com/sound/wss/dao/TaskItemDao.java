@@ -8,6 +8,7 @@ import com.sound.wss.dto.MyTaskCriteriaDTO;
 import com.sound.wss.po.DueTaskDO;
 import com.sound.wss.po.SupervisionInfoDO;
 import com.sound.wss.po.TaskItemDO;
+import com.sound.wss.po.WeChatPersonInfoDO;
 import com.sound.wss.po.WorkViewDO;
 
 public interface TaskItemDao {
@@ -97,5 +98,13 @@ public interface TaskItemDao {
 	 * @return
 	 */
 	public WorkViewDO listAllWorkViewInfos(String assignee);
+	
+	
+	/**
+	 * 查询微信ID
+	 * @param taskId
+	 * @return
+	 */
+	public WeChatPersonInfoDO viewWeChatPersonInfo(String taskId);
 
 }

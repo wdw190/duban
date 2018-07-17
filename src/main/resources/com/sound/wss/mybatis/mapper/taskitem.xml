@@ -31,6 +31,17 @@
 	<result property="supervisor" column="SUPERVISOR" />
 </resultMap>
 
+<!-- 微信处理人 -->
+<resultMap type="com.sound.wss.po.WeChatPersonInfoDO" id="SingleWeChatPersonInfoDOMap">
+	<result property="taskId" column="TASK_ID" />
+	<result property="assignee" column="ASSIGNEE" />
+	<result property="taskSummary" column="TASK_SUMMARY" />
+	<result property="assigneeId" column="ASSIGNEE_ID" />
+	<result property="supervisor" column="SUPERVISOR" />
+	<result property="supervisorId" column="SUPERVISOR_ID" />
+	
+</resultMap>
+
 <!-- 工作总览 -->
 <resultMap type="com.sound.wss.po.WorkViewDO" id="SingleWorkViewDOMap">
 	<result property="all" column="all" />
@@ -60,6 +71,7 @@
 <resultMap type="com.sound.wss.bo.TaskActionCombineBO" id="SingleTaskActionCombineBOMapInTaskItem">
 	<result property="taskId" column="TASK_ID" />
 	<result property="assignee" column="ASSIGNEE" />
+	<result property="supervisor" column="SUPERVISOR" />
 	<result property="taskSummary" column="TASK_SUMMARY" />
 	<result property="taskStatus" column="TASK_STATUS" />
 	<result property="taskCreated" column="TASK_CREATED" />
@@ -216,7 +228,7 @@ SELECT TASK_ID,
 		TASK_STATUS,
 		TASK_CREATED,
 		TASK_UPDATED,
-		TASK_DUEDATE,
+		date_format(TASK_DUEDATE,'%Y-%m-%d') AS TASK_DUEDATE,
 		TASK_RESOLUTIONDATE,
 		REPORTER,
         SUPERVISOR
@@ -321,6 +333,7 @@ WHERE
 
 SELECT TASK_ID,
        ASSIGNEE,
+       SUPERVISOR,
        TASK_SUMMARY,
        TASK_STATUS,
        TASK_CREATED,
@@ -376,6 +389,16 @@ GROUP BY ASSIGNEE;
 
 </select>	
 
+<!-- 查询 承办人 督办人的微信ID -->
+<select id="viewWeChatPersonInfo" parameterType="String" resultMap="SingleWeChatPersonInfoDOMap">
+SELECT TASK_ID,TASK_SUMMARY,ASSIGNEE,tbb.ID AS ASSIGNEE_ID,SUPERVISOR,tbc.ID AS SUPERVISOR_ID
+FROM TASK_ITEM AS tba, tb_user AS tbb, tb_user AS tbc
+WHERE     tba.TASK_ID = #{taskId}
+      AND tba.ASSIGNEE = tbb.WORKER_ID
+      AND tba.SUPERVISOR = tbc.WORKER_ID
+
+</select>
+
 <!-- 催办提醒 -->
 <select id="listAllSupervisionInfos" parameterType="String" resultMap="SingleSupervisionInfoDOMap">
 
@@ -420,10 +443,10 @@ GROUP BY tba.WORK_TYPE
 
 SELECT ASSIGNEE,
        sum(1)                                                  AS 'all',
-       sum(CASE WHEN TASK_STATUS = 'open' THEN 1 ELSE 0 END)   AS 'open',
-       sum(CASE WHEN TASK_STATUS = 'done' THEN 1 ELSE 0 END)   AS 'done',
+       sum(CASE WHEN TASK_RESOLUTION = 'open' THEN 1 ELSE 0 END)   AS 'open',
+       sum(CASE WHEN TASK_RESOLUTION = 'done' THEN 1 ELSE 0 END)   AS 'done',
        sum(CASE WHEN now() > TASK_DUEDATE THEN 1 ELSE 0 END)   AS 'delay',
-       sum(CASE WHEN TASK_STATUS = 'cancel' THEN 1 ELSE 0 END) AS 'cancel'
+       sum(CASE WHEN TASK_RESOLUTION = 'cancel' THEN 1 ELSE 0 END) AS 'cancel'
 FROM task_item
 WHERE ASSIGNEE = #{assignee}
 GROUP BY ASSIGNEE;

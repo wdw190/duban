@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sound.exception.WSSException;
 import com.sound.wss.bo.TaskActionCombineBO;
+import com.sound.wss.constants.WSSConstants;
 import com.sound.wss.dao.TaskItemDao;
 import com.sound.wss.dao.WorkItemDao;
 import com.sound.wss.dao.WorkTaskActionDao;
@@ -46,7 +47,7 @@ public class DefaultWorkTaskActionService implements WorkTaskActionService {
 
 	@Override
 	@Transactional
-	public ActionResultDTO addCommContent(WorkTaskActionDO workTaskActionDO, MultipartFile[] files,
+	public ActionResultDTO addCommContent(WorkTaskActionDO workTaskActionDO,TaskItemDO taskItemDOAdjustment, MultipartFile[] files,
 			HttpServletRequest request) throws WSSException {
 		ActionResultDTO actionResultDTO = new ActionResultDTO();
 		// 获取当前登录用户名
@@ -61,11 +62,12 @@ public class DefaultWorkTaskActionService implements WorkTaskActionService {
 		try {
 
 			// 处理审批操作
-			if (workTaskActionDO.getActionType().equalsIgnoreCase("approval")) {
-				approvalTask(workTaskActionDO);
+			if (workTaskActionDO.getActionType().equalsIgnoreCase(WSSConstants.APPROVAL_ADJUSTMENT_ACTION_TYPE)
+					|| workTaskActionDO.getActionType().equalsIgnoreCase(WSSConstants.APPROVAL_COMPLETE_ACTION_TYPE)) {
+				approvalTask(workTaskActionDO,taskItemDOAdjustment);
 			} else {
 
-				//非审批操作
+				// 非审批操作
 				TaskItemDO taskItemDO = new TaskItemDO();
 
 				taskItemDO.setTaskId(workTaskActionDO.getWorkOrTaskId());
@@ -73,7 +75,7 @@ public class DefaultWorkTaskActionService implements WorkTaskActionService {
 
 				this.taskItemDao.updateTaskItemStatusByTaskID(taskItemDO);
 			}
-			//插入操作内容
+			// 插入操作内容
 			this.workTaskActionDao.insertWorkTaskAction(workTaskActionDO);
 
 			// 上传附件
@@ -120,6 +122,7 @@ public class DefaultWorkTaskActionService implements WorkTaskActionService {
 			}
 
 			actionResultDTO.setFlag("success");
+			actionResultDTO.setMsg(workTaskActionDO.getWorkOrTaskId());
 		} catch (Exception e) {
 
 			logger.error("----------------------------------错误发生-----------------------------------------");
@@ -139,19 +142,21 @@ public class DefaultWorkTaskActionService implements WorkTaskActionService {
 	 */
 
 	@Override
-	public void approvalTask(WorkTaskActionDO workTaskActionDO) throws WSSException {
+	@Transactional
+	public void approvalTask(WorkTaskActionDO workTaskActionDO,TaskItemDO taskItemDOAdjustment) throws WSSException {
 
-		TaskActionCombineBO taskActionCombineBO = this.taskItemDao.queryLatestTaskItemActionRecord(workTaskActionDO.getWorkOrTaskId());
+		TaskActionCombineBO taskActionCombineBO = this.taskItemDao
+				.queryLatestTaskItemActionRecord(workTaskActionDO.getWorkOrTaskId());
 		// 处理申请完成时候的审批
-		if (taskActionCombineBO.getActionType().equalsIgnoreCase("applyforcompleted")) {
-			
-			workTaskActionDO.setActionType("applyforcompleted_approval");
+		if (taskActionCombineBO.getActionType().equalsIgnoreCase(WSSConstants.APPLY_FOR_COMPLETED_ACTION_TYPE)) {
+
+			workTaskActionDO.setActionType(WSSConstants.APPROVAL_COMPLETE_ACTION_TYPE);
 
 			TaskItemDO taskItemDO = new TaskItemDO();
 
 			taskItemDO.setTaskId(taskActionCombineBO.getTaskId());
-			taskItemDO.setTaskStatus("approval");
-			taskItemDO.setTaskResolution("done");
+			taskItemDO.setTaskStatus(WSSConstants.TASK_ITEM_STATUS_APPROVAL);
+			taskItemDO.setTaskResolution(WSSConstants.TASK_RESOLUTION_DONE);
 			taskItemDO.setTaskResolutiondate(taskActionCombineBO.getCreated());
 
 			try {
@@ -159,16 +164,19 @@ public class DefaultWorkTaskActionService implements WorkTaskActionService {
 			} catch (Exception e) {
 				throw new WSSException(e.getMessage());
 			}
-		} else if (taskActionCombineBO.getActionType().equalsIgnoreCase("applyforadjustment")) {
-			
-			workTaskActionDO.setActionType("applyforadjustment_approval");
+		} else if (taskActionCombineBO.getActionType().equalsIgnoreCase(WSSConstants.APPLY_FOR_ADJUSTMENT_ACTION_TYPE)) {
+
+			workTaskActionDO.setActionType(WSSConstants.APPROVAL_ADJUSTMENT_ACTION_TYPE);
 
 			TaskItemDO taskItemDO = new TaskItemDO();
 
 			taskItemDO.setTaskId(taskActionCombineBO.getTaskId());
-			taskItemDO.setTaskStatus("completechanges");
+			taskItemDO.setTaskStatus(WSSConstants.TASK_ITEM_STATUS_COMPLETE_CHANGES);
 
 			try {
+				
+				this.taskItemDao.updateTaskItemDoByTaskID(taskItemDOAdjustment);
+				
 				this.taskItemDao.updateTaskItemStatusByTaskID(taskItemDO);
 			} catch (Exception e) {
 				throw new WSSException(e.getMessage());

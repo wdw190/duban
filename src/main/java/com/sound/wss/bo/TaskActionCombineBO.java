@@ -11,6 +11,7 @@ public class TaskActionCombineBO implements Serializable {
 
 	private String taskId;
 	private String assignee;
+	private String supervisor;
 	private String taskSummary;
 	private String taskStatus;
 	private String taskCreated;
@@ -28,6 +29,12 @@ public class TaskActionCombineBO implements Serializable {
 	}
 	public void setAssignee(String assignee) {
 		this.assignee = assignee;
+	}
+	public String getSupervisor() {
+		return supervisor;
+	}
+	public void setSupervisor(String supervisor) {
+		this.supervisor = supervisor;
 	}
 	public String getTaskSummary() {
 		return taskSummary;
@@ -67,10 +74,13 @@ public class TaskActionCombineBO implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "TaskActionCombineBO [taskId=" + taskId + ", assignee=" + assignee + ", taskSummary=" + taskSummary
-				+ ", taskStatus=" + taskStatus + ", taskCreated=" + taskCreated + ", taskDuedate=" + taskDuedate
-				+ ", actionType=" + actionType + ", created=" + created + "]";
+		return "TaskActionCombineBO [taskId=" + taskId + ", assignee=" + assignee + ", supervisor=" + supervisor
+				+ ", taskSummary=" + taskSummary + ", taskStatus=" + taskStatus + ", taskCreated=" + taskCreated
+				+ ", taskDuedate=" + taskDuedate + ", actionType=" + actionType + ", created=" + created + "]";
 	}
+	
+	
+	
 	
 	
 	

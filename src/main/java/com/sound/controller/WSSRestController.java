@@ -51,7 +51,6 @@ public class WSSRestController {
 
 	private OrgService orgService;
 
-	@Autowired
 	private WSSProperties wssProperties;
 
 	/**
@@ -226,12 +225,14 @@ public class WSSRestController {
 	 * 操作处理--沟通进度-申请调整-申请完成-催办-审批
 	 * 
 	 * @param workTaskActionDO
+	 * @param taskItemDO
+	 *            调整审批时候 要修改任务项的内容
 	 * @param files
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/wss/addcommcontent", method = RequestMethod.POST)
-	public ActionResultDTO addCommContent(WorkTaskActionDO workTaskActionDO,
+	public ActionResultDTO addCommContent(WorkTaskActionDO workTaskActionDO, TaskItemDO taskItemDO,
 			@RequestParam(name = "fileAttachment") MultipartFile[] files, HttpServletRequest request) {
 		ActionResultDTO actionResultDTO = new ActionResultDTO();
 		try {
@@ -240,7 +241,12 @@ public class WSSRestController {
 			System.out.println(workTaskActionDO.toString());
 
 			System.out.println("--------------------------------------");
-			actionResultDTO = this.workTaskActionService.addCommContent(workTaskActionDO, files, request);
+			System.out.println("--------------------------------------");
+
+			System.out.println(taskItemDO.toString());
+
+			System.out.println("--------------------------------------");
+			actionResultDTO = this.workTaskActionService.addCommContent(workTaskActionDO, taskItemDO, files, request);
 		} catch (WSSException e) {
 			actionResultDTO.setFlag("failed");
 			actionResultDTO.setMsg(e.getMessage());
@@ -289,7 +295,9 @@ public class WSSRestController {
 	@RequestMapping(value = "/wss/list/treenode", method = RequestMethod.GET)
 	public WorkTaskResultBO<TreeNodeBO> listTreeNode() throws WSSException {
 
-		return this.orgService.dealTreeNodes(wssProperties.getDepId());
+		System.out.println("-------------------------------------" + wssProperties.getDepId());
+
+		return this.orgService.dealTreeNodes(350);
 
 	}
 
@@ -398,6 +406,16 @@ public class WSSRestController {
 	@Required
 	public void setOrgService(@Qualifier("defaultOrgService") OrgService orgService) {
 		this.orgService = orgService;
+	}
+
+	public WSSProperties getWssProperties() {
+		return wssProperties;
+	}
+
+	@Autowired
+	@Required
+	public void setWssProperties(@Qualifier("wssProperties") WSSProperties wssProperties) {
+		this.wssProperties = wssProperties;
 	}
 
 }

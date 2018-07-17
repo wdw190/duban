@@ -28,6 +28,8 @@
 <!-- DatePicker css -->
 <link rel="stylesheet" type="text/css"
 	th:href="@{/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css}"></link>
+<!-- Loading CSS -->
+<link rel="stylesheet" type="text/css" th:href="@{/loading/loading.css}"></link>
 <style type="text/css">
 .customBackgroundColor {
 	background-color: #3e9ff8
@@ -261,7 +263,9 @@
 		<!-- 提示信息 -->
 		<div th:replace="workitem/sub :: infoModal"></div>
 		<div th:replace="workitem/sub :: infoModalTaskItem"></div>
-		
+		<!-- 加载提示信息 -->
+
+		<div th:replace="workitem/commonsub :: loadingInfoModal"></div>
 		<!-- 组织架构 -->
 		<div th:replace="workitem/commonsub :: OrgModal"></div>
 
