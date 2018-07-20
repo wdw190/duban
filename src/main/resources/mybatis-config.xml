@@ -16,22 +16,10 @@
 	<mappers>
 		<mapper resource="com/sound/sample/mybatis/mapper/CityMapper.xml" />
 		<mapper resource="com/sound/sample/mybatis/mapper/HotelMapper.xml" />
-		<mapper resource="com/sound/battery/mybatis/mapper/Battery.xml" />
-		<mapper resource="com/sound/battery/mybatis/mapper/BatteryParam.xml" />
-		<mapper resource="com/sound/battery/mybatis/mapper/BatteryConfig.xml" />
 		<!-- 用户 -->
 		<mapper resource="com/sound/account/mybatis/mapper/account.xml" />
 		<!-- 角色 -->
 		<mapper resource="com/sound/roles/mybatis/mapper/roles.xml" />
-		
-		<!-- 工作项 -->
-		<mapper resource="com/sound/wss/mybatis/mapper/workitem.xml" />
-		<!-- 任务项 -->
-		<mapper resource="com/sound/wss/mybatis/mapper/taskitem.xml" />
-		<!-- 操作记录 -->
-		<mapper resource="com/sound/wss/mybatis/mapper/worktaskaction.xml" />
-		<!-- 督办 -->
-		<mapper resource="com/sound/wss/mybatis/mapper/supervision.xml" />
 		<!-- 组织架构 -->
 		<mapper resource="com/sound/wss/mybatis/mapper/org.xml" />
 	</mappers>
