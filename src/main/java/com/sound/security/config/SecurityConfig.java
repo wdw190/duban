@@ -44,12 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.tif")
 				.permitAll()
 
-				.antMatchers("/**/workitem/index/**").hasAnyRole("RECORDWORK")
-				.antMatchers("/**/workitem/worklist/**").hasAnyRole("DEALTASK")
-				.antMatchers("/**/workitem/supervisionlist/**").hasAnyRole("SUPERVISIONTASK")
-				//.antMatchers("/**/workitem/index/**").hasAnyRole("UNDERTAKETASK")
 				.antMatchers("/**/accountmaintain/index/**").hasAnyRole("USERMANAGEMENT")
 				.antMatchers("/**/roles/index/**").hasAnyRole("ROLEMENUMANAGEMENT")
+				.antMatchers("/**/batteries/index/**").hasAnyRole("ROLEMENUMANAGEMENT")
 				// 登录页面
 				.antMatchers("/login","/login-error").permitAll()
 				// 其它认证
